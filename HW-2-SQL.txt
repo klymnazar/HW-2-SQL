@@ -1,0 +1,107 @@
++	1. DCL?(Data Control Language). Створити декілька юзерів, розподілити для них різні ролі
+
+	select user from mysql.user;
+
+	CREATE DATABASE test_db;
+	CREATE TABLE test (id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY, name VARCHAR(32) NOT NULL, last_name VARCHAR(32) NOT NULL, phone INT(10) NOT NULL UNIQUE);
+	INSERT INTO test (name, last_name, phone) VALUES ('Petro', 'Grifin', 0979777797);
+	INSERT INTO test (name, last_name, phone) VALUES ('John', 'Snow', 0685050505);
+	INSERT INTO test (name, last_name, phone) VALUES ('Tony', 'Stark', 0979799997);
+
+	CREATE USER 'test_user'@'localhost' IDENTIFIED BY 'pass';
+
+	GRANT ALL PRIVILEGES ON test_db.test TO 'test_user'@'localhost';
+	REVOKE DROP, DELETE, UPDATE ON test_db.test FROM 'test_user'@'localhost';
+
+	CREATE USER 'testuser1'@'localhost' IDENTIFIED BY 'pass';
+
+	GRANT SELECT, INSERT, UPDATE ON test_db.test TO 'testuser1'@'localhost';
+	REVOKE UPDATE ON test_db.test FROM 'testuser1'@'localhost';
+
+
+
++	2. В якому порядку виконуються дії в SELECT query
+
+	SELECT column FROM table [WHERE condition] [GROUP BY condition] [HAVING condition] [ORDER BY condition]
+
+	1. FROM
+	2. WHERE
+	3. GROUP BY
+	4. HAVING
+	5. ORDER BY
+
+
+
++	3. Створити 3 таблиці,
++	a. 1. Студенти,
+	CREATE TABLE students (id INT(11) NOT NULL PRIMARY KEY AUTO_INCREMENT, name VARCHAR(32) NOT NULL, last_name VARCHAR(32) NOT NULL, phone INT(10) NOT NULL UNIQUE);
+	
+	INSERT INTO students (name, last_name, phone) VALUES ('Petro', 'Grifin', 0979777797);
+	INSERT INTO students (name, last_name, phone) VALUES ('Tony', 'Stark', 0979799997);
+	INSERT INTO students (name, last_name, phone) VALUES ('Marge', 'Simpson', 0676700067);
+	INSERT INTO students (name, last_name, phone) VALUES ('John', 'Walters', 0969677796);
+	INSERT INTO students (name, last_name, phone) VALUES ('John', 'Snow', 0685050505);
+
++	2. Предмети,
+	CREATE TABLE subjects1 (id INT(11) NOT NULL PRIMARY KEY AUTO_INCREMENT, subject_name VARCHAR(32) NOT NULL);
+	INSERT INTO subjects1 (subject_name) VALUES ('History', 1);
+	INSERT INTO subjects1 (subject_name) VALUES ('Mathematics', 2);
+	INSERT INTO subjects1 (subject_name) VALUES ('Literature', 3);
+	INSERT INTO subjects1 (subject_name) VALUES ('Psychology', 4);
+	INSERT INTO subjects1 (subject_name) VALUES ('Informatics', 5);
+
++	3. Бали(в табличці бали має бути по 4 оціник для кожного предмету, юзера).
+	CREATE TABLE ratings (id INT(11) NOT NULL PRIMARY KEY AUTO_INCREMENT, first_quarter INT(2) NOT NULL, second_quarter INT(2) NOT NULL,
+	third_quarter INT(2) NOT NULL, fourth_quarter INT(2) NOT NULL, subject_id INT(11) NOT NULL, student_id INT(11) NOT NULL,
+	FOREIGN KEY (subject_id) REFERENCES subjects (id) ON DELETE CASCADE ON UPDATE CASCADE
+	FOREIGN KEY (student_id) REFERENCES students (id) ON DELETE CASCADE ON UPDATE CASCADE);
+
+	INSERT INTO ratings (first_quarter, second_quarter, third_quarter, fourth_quarter, subject_id, student_id) VALUES (10, 20, 30, 40, 1, 1);
+	INSERT INTO ratings (first_quarter, second_quarter, third_quarter, fourth_quarter, subject_id, student_id) VALUES (5, 10, 15, 20, 2, 1);
+	INSERT INTO ratings (first_quarter, second_quarter, third_quarter, fourth_quarter, subject_id, student_id) VALUES (15, 20, 25, 30, 3, 1);
+	INSERT INTO ratings (first_quarter, second_quarter, third_quarter, fourth_quarter, subject_id, student_id) VALUES (20, 30, 20, 10, 4, 1);
+	INSERT INTO ratings (first_quarter, second_quarter, third_quarter, fourth_quarter, subject_id, student_id) VALUES (10, 10, 20, 15, 5, 1);
+
+	INSERT INTO ratings (first_quarter, second_quarter, third_quarter, fourth_quarter, subject_id, student_id) VALUES (10, 15, 20, 15, 1, 2);
+	INSERT INTO ratings (first_quarter, second_quarter, third_quarter, fourth_quarter, subject_id, student_id) VALUES (10, 15, 20, 20, 2, 2);
+	INSERT INTO ratings (first_quarter, second_quarter, third_quarter, fourth_quarter, subject_id, student_id) VALUES (10, 20, 30, 10, 3, 2);
+	INSERT INTO ratings (first_quarter, second_quarter, third_quarter, fourth_quarter, subject_id, student_id) VALUES (20, 15, 20, 20, 4, 2);
+	INSERT INTO ratings (first_quarter, second_quarter, third_quarter, fourth_quarter, subject_id, student_id) VALUES (10, 15, 25, 20, 5, 2);
+
+	INSERT INTO ratings (first_quarter, second_quarter, third_quarter, fourth_quarter, subject_id, student_id) VALUES (15, 25, 25, 20, 1, 3);
+	INSERT INTO ratings (first_quarter, second_quarter, third_quarter, fourth_quarter, subject_id, student_id) VALUES (20, 15, 15, 30, 2, 3);
+	INSERT INTO ratings (first_quarter, second_quarter, third_quarter, fourth_quarter, subject_id, student_id) VALUES (25, 20, 15, 30, 3, 3);
+	INSERT INTO ratings (first_quarter, second_quarter, third_quarter, fourth_quarter, subject_id, student_id) VALUES (25, 10, 25, 20, 4, 3);
+	INSERT INTO ratings (first_quarter, second_quarter, third_quarter, fourth_quarter, subject_id, student_id) VALUES (25, 20, 15, 20, 5, 3);
+
+	INSERT INTO ratings (first_quarter, second_quarter, third_quarter, fourth_quarter, subject_id, student_id) VALUES (15, 20, 25, 30, 1, 4);
+	INSERT INTO ratings (first_quarter, second_quarter, third_quarter, fourth_quarter, subject_id, student_id) VALUES (15, 20, 35, 20, 2, 4);
+	INSERT INTO ratings (first_quarter, second_quarter, third_quarter, fourth_quarter, subject_id, student_id) VALUES (25, 20, 15, 20, 3, 4);
+	INSERT INTO ratings (first_quarter, second_quarter, third_quarter, fourth_quarter, subject_id, student_id) VALUES (15, 20, 20, 20, 4, 4);
+	INSERT INTO ratings (first_quarter, second_quarter, third_quarter, fourth_quarter, subject_id, student_id) VALUES (15, 20, 20, 25, 5, 4);
+
+	INSERT INTO ratings (first_quarter, second_quarter, third_quarter, fourth_quarter, subject_id, student_id) VALUES (20, 15, 25, 25, 1, 5);
+	INSERT INTO ratings (first_quarter, second_quarter, third_quarter, fourth_quarter, subject_id, student_id) VALUES (20, 15, 25, 20, 2, 5);
+	INSERT INTO ratings (first_quarter, second_quarter, third_quarter, fourth_quarter, subject_id, student_id) VALUES (25, 10, 15, 20, 3, 5);
+	INSERT INTO ratings (first_quarter, second_quarter, third_quarter, fourth_quarter, subject_id, student_id) VALUES (25, 10, 15, 25, 4, 5);
+	INSERT INTO ratings (first_quarter, second_quarter, third_quarter, fourth_quarter, subject_id, student_id) VALUES (10, 15, 25, 25, 5, 5);
+
++	b. Отримати бали кожного студента по кожному предмету
+
+	SELECT st.name, st.last_name, sb.subject_name, r.first_quarter, r.second_quarter, r.third_quarter, r.fourth_quarter, r.first_quarter + r.second_quarter + r.third_quarter + r.fourth_quarter AS total_year FROM students st LEFT JOIN ratings r ON (st.id = r.student_id) LEFT JOIN subjects sb ON (sb.id = r.subject_id);	
+
+	SELECT st.name, st.last_name, sb.subject_name, r.first_quarter + r.second_quarter + r.third_quarter + r.fourth_quarter AS total_year FROM students st LEFT JOIN ratings r ON (st.id = r.student_id) LEFT JOIN subjects sb ON (sb.id = r.subject_id);
+
++	c. Знайти студентів і предмети з балом більшим ніж 80
+
+	SELECT st.name, st.last_name, sb.subject_name, r.first_quarter + r.second_quarter + r.third_quarter + r.fourth_quarter AS total_year FROM students st LEFT JOIN ratings r ON (st.id = r.student_id) LEFT JOIN subjects sb ON (sb.id = r.subject_id) HAVING total_year > 80;
+
++	d. Вивести середній бал кожного студента
+
+	SELECT st.name, st.last_name, SUM(first_quarter + second_quarter + third_quarter + fourth_quarter) AS total_year, AVG(first_quarter + second_quarter + third_quarter + fourth_quarter) AS avarage_scope FROM students st LEFT JOIN ratings r ON (st.id = r.student_id) GROUP BY st.id;
+
++	e. Знайти студентів з середнім балом вищим ніж 71
+
+	SELECT st.name, st.last_name, SUM(first_quarter + second_quarter + third_quarter + fourth_quarter) AS total_year, AVG(first_quarter + second_quarter + third_quarter + fourth_quarter) AS avarage_scope FROM students st LEFT JOIN ratings r ON (st.id = r.student_id) GROUP BY st.id HAVING avarage_scope > 71;
+
++	f. Додати foreign key для таблиць
